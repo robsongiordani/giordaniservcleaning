@@ -1,7 +1,15 @@
 <?php
 session_start();
 
-$erro = '';
+if(isset($_POST['login'])){
+
+    $_SESSION['usuario'] = 'Robson';
+    $_SESSION['tipo'] = 'admin';
+    $_SESSION['id'] = 1;
+
+    header('Location: admin/dashboard.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,21 +35,13 @@ href="assets/css/login.css">
 
 <h1>CleanManager</h1>
 
-<?php if(isset($erro)) { ?>
-
-<p><?php echo $erro; ?></p>
-
-<?php } ?>
-
 <input
 type="email"
-name="email"
 placeholder="E-mail"
 required>
 
 <input
 type="password"
-name="senha"
 placeholder="Senha"
 required>
 
