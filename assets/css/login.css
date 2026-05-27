@@ -42,3 +42,14 @@ body {
   font-weight: bold;
   cursor: pointer;
 }
+@media (max-width: 500px) {
+  .login-box {
+    width: 90%;
+
+    padding: 30px;
+  }
+
+  .login-box h1 {
+    font-size: 30px;
+  }
+}
