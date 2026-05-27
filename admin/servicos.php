@@ -1,3 +1,37 @@
+<?php
+include '../auth.php';
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Serviços</title>
+
+<link rel="stylesheet"
+href="../assets/css/dashboard.css">
+
+</head>
+
+<body>
+
+<?php include '../includes/sidebar.php'; ?>
+
+<div class="content">
+
+<div class="topbar">
+
+<h1>Serviços</h1>
+
+</div>
+
+<div class="card">
+
+<h2>Novo Atendimento</h2>
+
 <form>
 
 <div class="input-group">
@@ -17,9 +51,7 @@
 
 <label>Tipo de Serviço</label>
 
-<select name="tipo">
-
-<option>Selecionar Serviço</option>
+<select>
 
 <option>Faxina</option>
 <option>Meia-faxina</option>
@@ -35,28 +67,12 @@
 
 <div class="input-group">
 
-<label>Colaborador</label>
-
-<select>
-
-<option>Selecionar Colaborador</option>
-
-<option>João</option>
-
-</select>
-
-</div>
-
-<div class="input-group">
-
-<label>Valor do Atendimento</label>
+<label>Valor</label>
 
 <input
 type="number"
 step="0.01"
-name="valor"
-placeholder="0,00"
-required>
+placeholder="0,00">
 
 </div>
 
@@ -68,30 +84,6 @@ required>
 
 </div>
 
-<div class="input-group">
-
-<label>Status</label>
-
-<select>
-
-<option>Pendente</option>
-<option>Andamento</option>
-<option>Concluído</option>
-
-</select>
-
-</div>
-
-<div class="input-group">
-
-<label>Observações</label>
-
-<input
-type="text"
-placeholder="Observações do serviço">
-
-</div>
-
 <button>
 
 Salvar Atendimento
@@ -99,3 +91,70 @@ Salvar Atendimento
 </button>
 
 </form>
+
+</div>
+
+<div class="card">
+
+<h2>Atendimentos</h2>
+
+<div class="table-container">
+
+<table>
+
+<tr>
+
+<td>Maria Oliveira</td>
+
+<td>
+
+<div class="multi-service">
+
+<span>
+Faxina — R$180
+</span>
+
+<span>
+Lavanderia — R$80
+</span>
+
+<span>
+Airbnb — R$220
+</span>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="status concluido">
+Concluído
+</span>
+
+</td>
+
+</tr>
+
+<td>Maria Oliveira</td>
+<td>Faxina</td>
+<td>R$ 180</td>
+
+<td>
+<span class="status concluido">
+Concluído
+</span>
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

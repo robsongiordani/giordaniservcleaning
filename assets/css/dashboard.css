@@ -337,3 +337,22 @@ label {
 .input-group {
   margin-bottom: 20px;
 }
+.multi-service {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.multi-service span {
+  background: #1e293b;
+
+  padding: 10px 14px;
+
+  border-radius: 12px;
+
+  display: inline-block;
+
+  width: fit-content;
+}
