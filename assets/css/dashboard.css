@@ -324,3 +324,16 @@ table td {
 
   transition: 0.3s;
 }
+label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #cbd5e1;
+
+  font-size: 14px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
