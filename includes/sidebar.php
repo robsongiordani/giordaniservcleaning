@@ -2,20 +2,24 @@
 
 <h2>CleanManager</h2>
 
-<a href="dashboard.php">
+<a href="../admin/dashboard.php">
 Dashboard
 </a>
 
-<a href="clientes.php">
+<a href="../admin/clientes.php">
 Clientes
 </a>
 
-<a href="servicos.php">
+<a href="../admin/servicos.php">
 Serviços
 </a>
 
-<a href="colaboradores.php">
+<a href="../admin/colaboradores.php">
 Colaboradores
+</a>
+
+<a href="../admin/carteira-clientes.php">
+Carteira de Clientes
 </a>
 
 <a href="../logout.php">

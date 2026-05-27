@@ -57,3 +57,28 @@ VALUES
 ('Airbnb',180),
 ('Manutenção',120),
 ('Lavanderia',80);
+
+CREATE TABLE orcamentos (
+
+ id INT AUTO_INCREMENT PRIMARY KEY,
+
+ cliente_id INT,
+
+ total DECIMAL(10,2),
+
+ status VARCHAR(50),
+
+ data_orcamento DATE
+
+);
+CREATE TABLE itens_orcamento (
+
+ id INT AUTO_INCREMENT PRIMARY KEY,
+
+ orcamento_id INT,
+
+ servico VARCHAR(100),
+
+ valor DECIMAL(10,2)
+
+);
