@@ -26,3 +26,13 @@ CREATE TABLE servicos (
  data_servico DATE,
  status VARCHAR(50)
 );
+INSERT INTO usuarios
+(nome,email,senha,tipo)
+
+VALUES
+(
+'Robson',
+'admin@giordani.com',
+'$2y$10$Q9WwQkD7M8QK8h7M9fN9wOK8zP5TzJ1Q6Qw7m2hX2z9tL8N4sYxQW',
+'admin'
+);
