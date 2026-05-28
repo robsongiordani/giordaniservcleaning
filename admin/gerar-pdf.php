@@ -3,6 +3,7 @@
 require '../vendor/autoload.php';
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 include '../config/conexao.php';
 
@@ -34,11 +35,24 @@ WHERE orcamento_id = '$id'
 
 ");
 
+function base64Image($path){
+
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+
+    $data = file_get_contents($path);
+
+    return 'data:image/' . $type . ';base64,' . base64_encode($data);
+}
+
 $logo =
-__DIR__ . '/../assets/img/logo.png';
+base64Image(
+__DIR__ . '/../assets/img/logo.png'
+);
 
 $caricatura =
-__DIR__ . '/../assets/img/caricatura.png';
+base64Image(
+__DIR__ . '/../assets/img/caricatura.png'
+);
 
 $html = '
 
@@ -50,97 +64,105 @@ body{
 
     color:#0f172a;
 
-    font-size:13px;
+    font-size:12px;
 
-    line-height:1.5;
+    padding:25px;
+}
+
+.container{
+
+    border:1px solid #dbeafe;
+
+    border-radius:20px;
 
     padding:30px;
 }
 
-.header{
+.header-table{
 
     width:100%;
 
-    border-bottom:3px solid #2563eb;
+    border:none;
 
-    padding-bottom:20px;
+    margin-bottom:25px;
+}
 
-    margin-bottom:30px;
+.header-table td{
 
-    position:relative;
+    border:none;
+
+    vertical-align:top;
 }
 
 .logo{
 
-    width:160px;
+    width:120px;
 
-    margin-bottom:15px;
+    margin-bottom:10px;
 }
 
 .caricatura{
 
-    width:150px;
-
-    position:absolute;
-
-    top:0;
-
-    right:0;
+    width:180px;
 }
 
-h1{
+.title{
+
+    font-size:32px;
 
     color:#1e3a8a;
 
-    font-size:28px;
+    font-weight:bold;
 
-    margin:0 0 10px 0;
+    margin-bottom:10px;
 }
 
-h2{
-
-    color:#1e3a8a;
-
-    margin-top:30px;
-
-    font-size:22px;
-}
-
-.info p{
-
-    margin:4px 0;
+.info{
 
     color:#334155;
+
+    line-height:1.6;
 }
 
-.cliente{
+.orcamento-title{
 
     margin-top:20px;
 
+    font-size:20px;
+
+    color:#2563eb;
+
+    font-weight:bold;
+}
+
+.cliente-box{
+
     background:#f8fafc;
 
-    padding:18px;
+    padding:15px;
 
-    border-radius:10px;
+    border-radius:12px;
+
+    margin-top:20px;
 
     border:1px solid #e2e8f0;
 }
 
-.cliente p{
+.cliente-box p{
 
-    margin:6px 0;
+    margin:5px 0;
 }
 
-table{
+table.servicos{
 
     width:100%;
 
     border-collapse:collapse;
 
-    margin-top:30px;
+    margin-top:25px;
 }
 
-table th{
+table.servicos th{
 
     background:#2563eb;
 
@@ -148,14 +170,14 @@ table th{
 
     padding:12px;
 
-    font-size:13px;
-
     text-align:left;
+
+    font-size:12px;
 }
 
-table td{
+table.servicos td{
 
-    border:1px solid #ddd;
+    border:1px solid #dbeafe;
 
     padding:12px;
 
@@ -164,7 +186,7 @@ table td{
 
 .total{
 
-    margin-top:30px;
+    margin-top:25px;
 
     text-align:right;
 }
@@ -173,12 +195,12 @@ table td{
 
     color:#2563eb;
 
-    font-size:30px;
+    font-size:28px;
 }
 
 .footer{
 
-    margin-top:60px;
+    margin-top:40px;
 
     text-align:center;
 
@@ -189,17 +211,21 @@ table td{
 
 </style>
 
-<div class="header">
+<div class="container">
+
+<table class="header-table">
+
+<tr>
+
+<td width="70%">
 
 <img
 src="'.$logo.'"
 class="logo">
 
-<img
-src="'.$caricatura.'"
-class="caricatura">
-
-<h1>Giordani Cleaning</h1>
+<div class="title">
+Giordani Cleaning
+</div>
 
 <div class="info">
 
@@ -223,15 +249,27 @@ Penha e Barra Velha
 
 </div>
 
-</div>
+</td>
 
-<h2>
+<td width="30%" align="right">
+
+<img
+src="'.$caricatura.'"
+class="caricatura">
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="orcamento-title">
 
 ORÇAMENTO #'.$orcamento['id'].'
 
-</h2>
+</div>
 
-<div class="cliente">
+<div class="cliente-box">
 
 <p>
 
@@ -263,7 +301,7 @@ ORÇAMENTO #'.$orcamento['id'].'
 
 </div>
 
-<table>
+<table class="servicos">
 
 <thead>
 
@@ -345,9 +383,15 @@ Muito obrigado pela preferência!
 
 </div>
 
+</div>
+
 ';
 
-$dompdf = new Dompdf();
+$options = new Options();
+
+$options->set('isRemoteEnabled', true);
+
+$dompdf = new Dompdf($options);
 
 $dompdf->loadHtml($html);
 
