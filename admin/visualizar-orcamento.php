@@ -71,6 +71,20 @@ href="../assets/css/dashboard.css">
     margin-bottom:20px;
 }
 
+.preview-header h1{
+
+    color:#1e3a8a;
+
+    margin-top:10px;
+}
+
+.preview-header p{
+
+    margin:5px 0;
+
+    color:#334155;
+}
+
 .preview table{
 
     width:100%;
@@ -95,6 +109,11 @@ href="../assets/css/dashboard.css">
     color:white;
 }
 
+.preview table td{
+
+    color:#0f172a;
+}
+
 .total{
 
     text-align:right;
@@ -114,6 +133,8 @@ href="../assets/css/dashboard.css">
     gap:15px;
 
     margin-top:30px;
+
+    flex-wrap:wrap;
 }
 
 .btn{
@@ -127,6 +148,8 @@ href="../assets/css/dashboard.css">
     color:white;
 
     font-weight:bold;
+
+    display:inline-block;
 }
 
 .whatsapp{
@@ -136,7 +159,30 @@ href="../assets/css/dashboard.css">
 
 .pdf{
 
-    background:#2563eb;
+    background:#7c3aed;
+}
+
+.approve{
+
+    background:#0f766e;
+}
+
+.client-box{
+
+    background:#f8fafc;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    margin-top:20px;
+
+    border:1px solid #e2e8f0;
+}
+
+.client-box p{
+
+    margin:6px 0;
 }
 
 </style>
@@ -152,7 +198,9 @@ href="../assets/css/dashboard.css">
 <div class="topbar">
 
 <h1>
+
 Orçamento #<?= $orcamento['id']; ?>
+
 </h1>
 
 </div>
@@ -182,6 +230,11 @@ Serviços de Limpeza,
 Lavanderia e Manutenção
 </p>
 
+<p>
+Atendimento em Balneário Piçarras,
+Penha e Barra Velha
+</p>
+
 </div>
 
 <img
@@ -190,19 +243,41 @@ width="220">
 
 </div>
 
-<h2>
-
-Cliente:
-<?= $orcamento['nome']; ?>
-
-</h2>
+<div class="client-box">
 
 <p>
 
-Data:
+<strong>Cliente:</strong>
+
+<?= $orcamento['nome']; ?>
+
+</p>
+
+<p>
+
+<strong>Telefone:</strong>
+
+<?= $orcamento['telefone']; ?>
+
+</p>
+
+<p>
+
+<strong>Data:</strong>
+
 <?= $orcamento['data']; ?>
 
 </p>
+
+<p>
+
+<strong>Status:</strong>
+
+<?= $orcamento['status']; ?>
+
+</p>
+
+</div>
 
 <table>
 
@@ -225,11 +300,15 @@ Data:
 <tr>
 
 <td>
+
 <?= $item['servico']; ?>
+
 </td>
 
 <td>
+
 <?= $item['descricao']; ?>
+
 </td>
 
 <td>
@@ -270,19 +349,26 @@ $orcamento['total'],
 <div class="btns">
 
 <a
-target="_blank"
-href="https://wa.me/55<?= preg_replace('/[^0-9]/', '', $orcamento['telefone']); ?>?text=Olá! Segue seu orçamento da Giordani Cleaning."
-class="btn whatsapp">
-
-Enviar WhatsApp
-
-</a>
-
-<a
 href="gerar-pdf.php?id=<?= $orcamento['id']; ?>"
 class="btn pdf">
 
 Gerar PDF
+
+</a>
+
+<a
+target="_blank"
+href="https://wa.me/55<?= preg_replace('/[^0-9]/', '', $orcamento['telefone']); ?>?text=Olá <?= $orcamento['nome']; ?>! Segue seu orçamento da Giordani Cleaning."
+class="btn whatsapp">
+Abrir WhatsApp
+
+</a>
+
+<a
+href="#"
+class="btn approve">
+
+Aprovar Orçamento
 
 </a>
 
