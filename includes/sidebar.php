@@ -22,6 +22,14 @@ Ordens de Serviço
 Orçamentos
 </a>
 
+<a href="../admin/agenda.php">
+Agenda
+</a>
+
+<a href="../admin/recibos.php">
+Recibos
+</a>
+
 <a href="../admin/carteira-clientes.php">
 Carteira de Clientes
 </a>
@@ -31,10 +39,3 @@ Sair
 </a>
 
 </div>
-<a href="../admin/agenda.php">
-Agenda
-</a>
-
-<a href="../admin/recibos.php">
-Recibos
-</a>

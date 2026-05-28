@@ -65,6 +65,32 @@ href="../assets/css/dashboard.css">
     display:inline-block;
 
     margin-top:10px;
+
+    font-weight:bold;
+}
+
+.action-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    margin-left:15px;
+
+    display:inline-block;
+}
+
+.action-area{
+
+    margin-top:20px;
 }
 
 </style>
@@ -133,26 +159,21 @@ href="../assets/css/dashboard.css">
 
 </p>
 
-<div class="status">
+<div class="action-area">
 
-<br><br>
+<span class="status">
+
+<?= $item['status']; ?>
+
+</span>
 
 <a
 href="concluir-servico.php?id=<?= $item['id']; ?>"
-style="
-background:#2563eb;
-color:white;
-padding:10px 16px;
-border-radius:10px;
-text-decoration:none;
-font-weight:bold;
-">
+class="action-btn">
 
 Concluir Serviço
 
 </a>
-
-<?= $item['status']; ?>
 
 </div>
 
