@@ -34,3 +34,32 @@ $db->exec("CREATE TABLE IF NOT EXISTS servicos (
 )");
 
 echo "Tabela servicos criada!";
+$db->exec("CREATE TABLE IF NOT EXISTS ordens (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    cliente_id INTEGER,
+
+    data TEXT,
+
+    status TEXT,
+
+    observacoes TEXT,
+
+    total REAL
+
+)");
+
+$db->exec("CREATE TABLE IF NOT EXISTS itens_ordem (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    ordem_id INTEGER,
+
+    servico TEXT,
+
+    descricao TEXT,
+
+    valor REAL
+
+)");
