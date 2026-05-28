@@ -34,3 +34,7 @@ Sair
 <a href="../admin/agenda.php">
 Agenda
 </a>
+
+<a href="../admin/recibos.php">
+Recibos
+</a>

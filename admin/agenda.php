@@ -135,6 +135,23 @@ href="../assets/css/dashboard.css">
 
 <div class="status">
 
+<br><br>
+
+<a
+href="concluir-servico.php?id=<?= $item['id']; ?>"
+style="
+background:#2563eb;
+color:white;
+padding:10px 16px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+">
+
+Concluir Serviço
+
+</a>
+
 <?= $item['status']; ?>
 
 </div>

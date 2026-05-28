@@ -111,3 +111,18 @@ $db->exec("CREATE TABLE IF NOT EXISTS agenda (
     status TEXT
 
 )");
+$db->exec("CREATE TABLE IF NOT EXISTS historico_financeiro (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    cliente TEXT,
+
+    telefone TEXT,
+
+    servico TEXT,
+
+    valor REAL,
+
+    data TEXT
+
+)");
