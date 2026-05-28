@@ -46,34 +46,9 @@ if($_POST){
 
     $db->exec("
 
-    $db->exec("
-
-INSERT INTO agenda
-(
-    orcamento_id,
-    cliente,
-    telefone,
-    servicos,
-    data,
-    horario,
-    observacoes,
-    status
-)
-
-VALUES
-(
-    '$id',
-    '".$orcamento['nome']."',
-    '".$orcamento['telefone']."',
-    '".$lista."',
-    '$data',
-    '$horario',
-    '$observacoes',
-    'Agendado'
-)
-
-");
+    INSERT INTO agenda
     (
+        orcamento_id,
         cliente,
         telefone,
         servicos,
@@ -85,6 +60,7 @@ VALUES
 
     VALUES
     (
+        '$id',
         '".$orcamento['nome']."',
         '".$orcamento['telefone']."',
         '".$lista."',
