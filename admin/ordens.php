@@ -1,6 +1,5 @@
 <?php
 
-include '../auth.php';
 include '../config/conexao.php';
 
 $clientes = $db->query(
@@ -23,11 +22,6 @@ href="../assets/css/dashboard.css">
 
 <style>
 
-.services-list{
-
-    margin-top:20px;
-}
-
 .service-item{
 
     display:grid;
@@ -36,18 +30,48 @@ href="../assets/css/dashboard.css">
 
     gap:10px;
 
-    margin-bottom:10px;
+    margin-bottom:15px;
+}
+
+.add-btn{
+
+    background:#22c55e;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+.remove-btn{
+
+    background:#ef4444;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 14px;
+
+    border-radius:10px;
+
+    cursor:pointer;
 }
 
 .total-box{
 
-    background:#f5f7ff;
+    margin-top:20px;
+
+    background:#eff6ff;
 
     padding:20px;
 
     border-radius:15px;
-
-    margin-top:20px;
 
     text-align:right;
 }
@@ -61,15 +85,13 @@ href="../assets/css/dashboard.css">
 
 .preview{
 
+    margin-top:30px;
+
     background:white;
 
     padding:30px;
 
     border-radius:20px;
-
-    margin-top:20px;
-
-    box-shadow:0 0 10px rgba(0,0,0,0.05);
 }
 
 .preview-header{
@@ -90,11 +112,6 @@ href="../assets/css/dashboard.css">
 .preview-logo{
 
     width:180px;
-}
-
-.preview h1{
-
-    color:#1e3a8a;
 }
 
 .preview table{
@@ -121,36 +138,6 @@ href="../assets/css/dashboard.css">
     color:white;
 }
 
-.add-btn{
-
-    background:#22c55e;
-
-    color:white;
-
-    border:none;
-
-    padding:10px 18px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-}
-
-.remove-btn{
-
-    background:#ef4444;
-
-    color:white;
-
-    border:none;
-
-    padding:10px 15px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-}
-
 .generate-btn{
 
     background:#2563eb;
@@ -161,13 +148,13 @@ href="../assets/css/dashboard.css">
 
     padding:15px 25px;
 
-    border-radius:12px;
-
-    font-size:16px;
+    border-radius:14px;
 
     cursor:pointer;
 
     margin-top:20px;
+
+    font-size:16px;
 }
 
 </style>
@@ -188,8 +175,6 @@ href="../assets/css/dashboard.css">
 
 <div class="card">
 
-<form>
-
 <div class="input-group">
 
 <label>Cliente</label>
@@ -203,9 +188,7 @@ Selecionar Cliente
 <?php while($cliente = $clientes->fetchArray()) { ?>
 
 <option>
-
 <?= $cliente['nome']; ?>
-
 </option>
 
 <?php } ?>
@@ -213,20 +196,6 @@ Selecionar Cliente
 </select>
 
 </div>
-
-<div class="input-group">
-
-<label>Observações</label>
-
-<textarea
-placeholder="Detalhes do serviço...">
-</textarea>
-
-</div>
-
-<div class="services-list">
-
-<h2>Serviços</h2>
 
 <div id="services-container">
 
@@ -248,11 +217,12 @@ placeholder="Descrição">
 
 <input
 type="number"
-placeholder="Valor">
+placeholder="Valor"
+class="valor">
 
 <button
-type="button"
-class="remove-btn">
+class="remove-btn"
+onclick="this.parentElement.remove(); calcularTotal();">
 
 X
 
@@ -263,15 +233,12 @@ X
 </div>
 
 <button
-type="button"
 class="add-btn"
 onclick="addService()">
 
 + Adicionar Serviço
 
 </button>
-
-</div>
 
 <div class="total-box">
 
@@ -283,14 +250,11 @@ R$ 0,00
 
 </div>
 
-<button
-class="generate-btn">
+<button class="generate-btn">
 
 Gerar Orçamento
 
 </button>
-
-</form>
 
 </div>
 
@@ -307,29 +271,30 @@ class="preview-logo">
 <h1>Giordani Cleaning</h1>
 
 <p>
-(47) 99213-2615<br>
+(47) 99213-2615
+</p>
+
+<p>
 (47) 99183-3664
 </p>
 
 <p>
 Serviços de Limpeza,
-Lavanderia e Manutenção.
+Lavanderia e Manutenção
 </p>
 
 <p>
 Atendimento em Balneário Piçarras,
-Penha e Barra Velha.
+Penha e Barra Velha
 </p>
 
 </div>
 
 <img
 src="../assets/img/caricatura.png"
-width="180">
+width="220">
 
 </div>
-
-<h2>ORÇAMENTO</h2>
 
 <table>
 
@@ -367,11 +332,6 @@ R$ 0,00
 
 function addService(){
 
-    let container =
-    document.getElementById(
-    'services-container'
-    );
-
     let div =
     document.createElement('div');
 
@@ -399,7 +359,6 @@ function addService(){
     class="valor">
 
     <button
-    type="button"
     class="remove-btn"
     onclick="this.parentElement.remove(); calcularTotal();">
 
@@ -409,9 +368,9 @@ function addService(){
 
     `;
 
-    container.appendChild(div);
-
-    atualizarPreview();
+    document
+    .getElementById('services-container')
+    .appendChild(div);
 }
 
 document.addEventListener(

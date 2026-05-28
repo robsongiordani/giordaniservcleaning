@@ -1,19 +1,14 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include '../auth.php';
+include '../config/conexao.php';
 
-$db = new SQLite3(
-__DIR__ . '/../database/cleanmanager.db'
+$clientes = $db->query(
+"SELECT * FROM clientes ORDER BY nome ASC"
 );
-
-$id = $_GET['id'];
-
-$result = $db->query(
-"SELECT * FROM clientes
-WHERE id = $id"
-);
-
-$cliente = $result->fetchArray();
 
 ?>
 
