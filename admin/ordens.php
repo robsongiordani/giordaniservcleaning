@@ -5,6 +5,73 @@ ini_set('display_errors', 1);
 
 include '../config/conexao.php';
 
+if(isset($_POST['salvar'])){
+
+    $cliente_id = $_POST['cliente'];
+    $observacoes = $_POST['observacoes'];
+    $total = $_POST['total'];
+    $data = date('d/m/Y');
+
+    $db->exec("
+    INSERT INTO orcamentos
+    (
+        cliente_id,
+        observacoes,
+        total,
+        status,
+        data
+    )
+
+    VALUES
+    (
+        '$cliente_id',
+        '$observacoes',
+        '$total',
+        'Pendente',
+        '$data'
+    )
+    ");
+
+    $orcamento_id =
+    $db->lastInsertRowID();
+
+    if(isset($_POST['servico'])){
+
+        foreach($_POST['servico'] as $index => $servico){
+
+            $descricao =
+            $_POST['descricao'][$index];
+
+            $valor =
+            $_POST['valor'][$index];
+
+            $db->exec("
+            INSERT INTO itens_orcamento
+            (
+                orcamento_id,
+                servico,
+                descricao,
+                valor
+            )
+
+            VALUES
+            (
+                '$orcamento_id',
+                '$servico',
+                '$descricao',
+                '$valor'
+            )
+            ");
+        }
+    }
+
+    echo "
+    <script>
+    alert('Orçamento salvo com sucesso!');
+    </script>
+    ";
+}
+
 $clientes = $db->query(
 "SELECT * FROM clientes ORDER BY nome ASC"
 );
@@ -79,6 +146,12 @@ href="../assets/css/dashboard.css">
     text-align:right;
 }
 
+.total-box p{
+
+    color:#334155;
+
+}
+
 .total-box h2{
 
     color:#2563eb;
@@ -97,7 +170,6 @@ href="../assets/css/dashboard.css">
     border-radius:20px;
 
     color:#1e293b;
-
 }
 
 .preview-header{
@@ -113,6 +185,19 @@ href="../assets/css/dashboard.css">
     padding-bottom:20px;
 
     margin-bottom:20px;
+}
+
+.preview-header h1{
+
+    color:#1e3a8a;
+
+}
+
+.preview-header p{
+
+    color:#334155;
+
+    line-height:1.6;
 }
 
 .preview-logo{
@@ -144,6 +229,17 @@ href="../assets/css/dashboard.css">
     color:white;
 }
 
+.preview table td{
+
+    color:#0f172a;
+}
+
+.preview h2{
+
+    color:#1e3a8a;
+
+}
+
 .generate-btn{
 
     background:#2563eb;
@@ -161,6 +257,21 @@ href="../assets/css/dashboard.css">
     margin-top:20px;
 
     font-size:16px;
+}
+
+textarea{
+
+    width:100%;
+
+    min-height:100px;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    border:1px solid #ddd;
+
+    margin-top:10px;
 }
 
 </style>
@@ -181,20 +292,27 @@ href="../assets/css/dashboard.css">
 
 <div class="card">
 
+<form method="POST">
+
 <div class="input-group">
 
 <label>Cliente</label>
 
-<select>
+<select
+name="cliente"
+required>
 
-<option>
+<option value="">
 Selecionar Cliente
 </option>
 
 <?php while($cliente = $clientes->fetchArray()) { ?>
 
-<option>
+<option
+value="<?= $cliente['id']; ?>">
+
 <?= $cliente['nome']; ?>
+
 </option>
 
 <?php } ?>
@@ -203,11 +321,22 @@ Selecionar Cliente
 
 </div>
 
+<div class="input-group">
+
+<label>Observações</label>
+
+<textarea
+name="observacoes"
+placeholder="Detalhes do orçamento">
+</textarea>
+
+</div>
+
 <div id="services-container">
 
 <div class="service-item">
 
-<select>
+<select name="servico[]">
 
 <option>Faxina</option>
 <option>Lavanderia</option>
@@ -219,17 +348,20 @@ Selecionar Cliente
 
 <input
 type="text"
+name="descricao[]"
 placeholder="Descrição">
 
 <input
 type="number"
+step="0.01"
+name="valor[]"
 placeholder="Valor"
 class="valor">
 
 <button
 type="button"
 class="remove-btn"
-onclick="this.parentElement.remove(); calcularTotal();">
+onclick="this.parentElement.remove(); calcularTotal(); atualizarPreview();">
 
 X
 
@@ -258,12 +390,21 @@ R$ 0,00
 
 </div>
 
+<input
+type="hidden"
+name="total"
+id="input-total">
+
 <button
+type="submit"
+name="salvar"
 class="generate-btn">
 
-Gerar Orçamento
+Salvar Orçamento
 
 </button>
+
+</form>
 
 </div>
 
@@ -304,6 +445,8 @@ src="../assets/img/caricatura.png"
 width="220">
 
 </div>
+
+<h2>ORÇAMENTO</h2>
 
 <table>
 
@@ -348,7 +491,7 @@ function addService(){
 
     div.innerHTML = `
 
-    <select>
+    <select name="servico[]">
 
         <option>Faxina</option>
         <option>Lavanderia</option>
@@ -360,17 +503,20 @@ function addService(){
 
     <input
     type="text"
+    name="descricao[]"
     placeholder="Descrição">
 
     <input
     type="number"
+    step="0.01"
+    name="valor[]"
     placeholder="Valor"
     class="valor">
 
     <button
     type="button"
     class="remove-btn"
-    onclick="this.parentElement.remove(); calcularTotal();">
+    onclick="this.parentElement.remove(); calcularTotal(); atualizarPreview();">
 
     X
 
@@ -403,6 +549,10 @@ function calcularTotal(){
         total += Number(input.value);
 
     });
+
+    document
+    .getElementById('input-total')
+    .value = total;
 
     document
     .getElementById('total')

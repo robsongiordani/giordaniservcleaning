@@ -62,3 +62,32 @@ $db->exec("CREATE TABLE IF NOT EXISTS itens_ordem (
 )");
 
 echo "Tabela ordens criada!";
+$db->exec("CREATE TABLE IF NOT EXISTS orcamentos (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    cliente_id INTEGER,
+
+    observacoes TEXT,
+
+    total REAL,
+
+    status TEXT,
+
+    data TEXT
+
+)");
+
+$db->exec("CREATE TABLE IF NOT EXISTS itens_orcamento (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    orcamento_id INTEGER,
+
+    servico TEXT,
+
+    descricao TEXT,
+
+    valor REAL
+
+)");
