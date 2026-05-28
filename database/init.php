@@ -25,15 +25,12 @@ $db->exec("CREATE TABLE IF NOT EXISTS servicos (
 
     valor REAL,
 
-    data TEXT,
-
-    colaborador TEXT,
-
-    status TEXT
+    data TEXT
 
 )");
 
-echo "Tabela servicos criada!";
+echo "Tabela servicos criada!<br>";
+
 $db->exec("CREATE TABLE IF NOT EXISTS ordens (
 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,3 +60,5 @@ $db->exec("CREATE TABLE IF NOT EXISTS itens_ordem (
     valor REAL
 
 )");
+
+echo "Tabela ordens criada!";

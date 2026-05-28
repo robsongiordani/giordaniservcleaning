@@ -14,8 +14,8 @@ Clientes
 Serviços
 </a>
 
-<a href="../admin/colaboradores.php">
-Colaboradores
+<a href="../admin/ordens.php">
+Ordens de Serviço
 </a>
 
 <a href="../admin/carteira-clientes.php">

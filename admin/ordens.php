@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include '../config/conexao.php';
 
 $clientes = $db->query(
@@ -92,6 +95,9 @@ href="../assets/css/dashboard.css">
     padding:30px;
 
     border-radius:20px;
+
+    color:#1e293b;
+
 }
 
 .preview-header{
@@ -221,6 +227,7 @@ placeholder="Valor"
 class="valor">
 
 <button
+type="button"
 class="remove-btn"
 onclick="this.parentElement.remove(); calcularTotal();">
 
@@ -233,6 +240,7 @@ X
 </div>
 
 <button
+type="button"
 class="add-btn"
 onclick="addService()">
 
@@ -250,7 +258,8 @@ R$ 0,00
 
 </div>
 
-<button class="generate-btn">
+<button
+class="generate-btn">
 
 Gerar Orçamento
 
@@ -359,6 +368,7 @@ function addService(){
     class="valor">
 
     <button
+    type="button"
     class="remove-btn"
     onclick="this.parentElement.remove(); calcularTotal();">
 
