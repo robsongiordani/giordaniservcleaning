@@ -365,10 +365,17 @@ Abrir WhatsApp
 </a>
 
 <a
-href="#"
+href="aprovar-orcamento.php?id=<?= $orcamento['id']; ?>"
 class="btn approve">
 
 Aprovar Orçamento
+<a
+href="excluir-orcamento.php?id=<?= $orcamento['id']; ?>"
+class="btn"
+
+style="background:#ef4444;">
+
+Excluir
 
 </a>
 
