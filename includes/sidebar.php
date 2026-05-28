@@ -18,6 +18,10 @@ Serviços
 Ordens de Serviço
 </a>
 
+<a href="../admin/orcamentos.php">
+Orçamentos
+</a>
+
 <a href="../admin/carteira-clientes.php">
 Carteira de Clientes
 </a>
@@ -27,6 +31,3 @@ Sair
 </a>
 
 </div>
-<a href="../admin/orcamentos.php">
-Orçamentos
-</a>

@@ -33,6 +33,39 @@ href="../assets/css/dashboard.css">
 
 <style>
 
+.table-container{
+
+    overflow-x:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+}
+
+table th,
+table td{
+
+    padding:15px;
+
+    border-bottom:1px solid #eee;
+
+    text-align:left;
+
+    color:#0f172a;
+}
+
+table th{
+
+    background:#f1f5f9;
+
+    color:#1e293b;
+}
+
 .status{
 
     padding:8px 14px;
@@ -41,24 +74,16 @@ href="../assets/css/dashboard.css">
 
     color:white;
 
-    font-size:14px;
+    font-size:13px;
 
     font-weight:bold;
+
+    display:inline-block;
 }
 
 .pendente{
 
     background:#f59e0b;
-}
-
-.aprovado{
-
-    background:#22c55e;
-}
-
-.concluido{
-
-    background:#2563eb;
 }
 
 .actions{
@@ -72,19 +97,19 @@ href="../assets/css/dashboard.css">
 
 .action-btn{
 
-    border:none;
-
-    padding:10px 15px;
+    padding:10px 16px;
 
     border-radius:10px;
 
-    cursor:pointer;
-
-    color:white;
+    color:white !important;
 
     text-decoration:none;
 
     font-size:14px;
+
+    font-weight:bold;
+
+    display:inline-block;
 }
 
 .view{
@@ -100,33 +125,6 @@ href="../assets/css/dashboard.css">
 .approve{
 
     background:#0f766e;
-}
-
-.table-container{
-
-    overflow:auto;
-}
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-}
-
-table th,
-table td{
-
-    padding:15px;
-
-    border-bottom:1px solid #eee;
-
-    text-align:left;
-}
-
-table th{
-
-    background:#f8fafc;
 }
 
 </style>
@@ -219,13 +217,14 @@ $orcamento['total'],
 href="visualizar-orcamento.php?id=<?= $orcamento['id']; ?>"
 class="action-btn view">
 
-Ver
+Visualizar
 
 </a>
 
 <a
 target="_blank"
-href="https://wa.me/?text=Segue seu orçamento da Giordani Cleaning">
+href="https://wa.me/?text=Segue seu orçamento da Giordani Cleaning"
+class="action-btn whatsapp">
 
 WhatsApp
 
