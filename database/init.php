@@ -92,7 +92,27 @@ $db->exec("CREATE TABLE IF NOT EXISTS itens_orcamento (
 
 )");
 
-$db->exec("CREATE TABLE IF NOT EXISTS agenda (
+$db->exec("$db->exec("CREATE TABLE IF NOT EXISTS agenda (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    orcamento_id INTEGER,
+
+    cliente TEXT,
+
+    telefone TEXT,
+
+    servicos TEXT,
+
+    data TEXT,
+
+    horario TEXT,
+
+    observacoes TEXT,
+
+    status TEXT
+
+)"); (
 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 

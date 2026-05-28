@@ -54,8 +54,6 @@ href="../assets/css/dashboard.css">
 
 .status{
 
-    background:#22c55e;
-
     color:white;
 
     padding:8px 14px;
@@ -64,14 +62,25 @@ href="../assets/css/dashboard.css">
 
     display:inline-block;
 
-    margin-top:10px;
-
     font-weight:bold;
 }
 
-.action-btn{
+.agendado{
+
+    background:#f59e0b;
+}
+
+.andamento{
 
     background:#2563eb;
+}
+
+.concluido{
+
+    background:#22c55e;
+}
+
+.action-btn{
 
     color:white;
 
@@ -86,6 +95,16 @@ href="../assets/css/dashboard.css">
     margin-left:15px;
 
     display:inline-block;
+}
+
+.start{
+
+    background:#2563eb;
+}
+
+.finish{
+
+    background:#16a34a;
 }
 
 .action-area{
@@ -161,19 +180,51 @@ href="../assets/css/dashboard.css">
 
 <div class="action-area">
 
-<span class="status">
+<?php if($item['status'] == 'Agendado') { ?>
 
-<?= $item['status']; ?>
+<span class="status agendado">
+
+Agendado
 
 </span>
 
 <a
-href="concluir-servico.php?id=<?= $item['id']; ?>"
-class="action-btn">
+href="iniciar-servico.php?id=<?= $item['id']; ?>"
+class="action-btn start">
 
-Concluir Serviço
+Iniciar Serviço
 
 </a>
+
+<?php } ?>
+
+<?php if($item['status'] == 'Em andamento') { ?>
+
+<span class="status andamento">
+
+Em andamento
+
+</span>
+
+<a
+href="finalizar-servico.php?id=<?= $item['id']; ?>"
+class="action-btn finish">
+
+Finalizar Serviço
+
+</a>
+
+<?php } ?>
+
+<?php if($item['status'] == 'Concluído') { ?>
+
+<span class="status concluido">
+
+Concluído
+
+</span>
+
+<?php } ?>
 
 </div>
 
