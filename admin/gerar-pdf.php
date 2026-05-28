@@ -58,6 +58,10 @@ $html = '
 
 <style>
 
+@page {
+    margin: 20px;
+}
+
 body{
 
     font-family: DejaVu Sans;
@@ -392,8 +396,13 @@ $options = new Options();
 $options->set('isRemoteEnabled', true);
 
 $dompdf = new Dompdf($options);
-
-$dompdf->loadHtml($html);
+$dompdf->loadHtml(
+mb_convert_encoding(
+$html,
+'HTML-ENTITIES',
+'UTF-8'
+)
+);
 
 $dompdf->setPaper('A4', 'portrait');
 
