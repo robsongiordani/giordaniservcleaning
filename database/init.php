@@ -91,6 +91,7 @@ $db->exec("CREATE TABLE IF NOT EXISTS itens_orcamento (
     valor REAL
 
 )");
+
 $db->exec("CREATE TABLE IF NOT EXISTS agenda (
 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -102,6 +103,10 @@ $db->exec("CREATE TABLE IF NOT EXISTS agenda (
     servicos TEXT,
 
     data TEXT,
+
+    horario TEXT,
+
+    observacoes TEXT,
 
     status TEXT
 

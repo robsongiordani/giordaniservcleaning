@@ -31,3 +31,6 @@ Sair
 </a>
 
 </div>
+<a href="../admin/agenda.php">
+Agenda
+</a>

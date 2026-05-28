@@ -365,7 +365,7 @@ Abrir WhatsApp
 </a>
 
 <a
-href="aprovar-orcamento.php?id=<?= $orcamento['id']; ?>"
+href="agendar-servico.php?id=<?= $orcamento['id']; ?>"
 class="btn approve">
 
 Aprovar Orçamento
