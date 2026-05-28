@@ -1,5 +1,7 @@
 <?php
 
-$db = new SQLite3(__DIR__ . '/../database/cleanmanager.db');
+$db = new SQLite3(
+__DIR__ . '/../database/cleanmanager.db'
+);
 
 ?>

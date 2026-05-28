@@ -1,5 +1,49 @@
 <?php
+
 include '../auth.php';
+include '../config/conexao.php';
+
+if(isset($_POST['salvar'])){
+
+    $cliente_id = $_POST['cliente_id'];
+    $tipo = $_POST['tipo'];
+    $valor = $_POST['valor'];
+    $data = $_POST['data'];
+
+    $db->exec("
+    INSERT INTO servicos
+    (
+        cliente_id,
+        tipo,
+        valor,
+        data
+    )
+
+    VALUES
+    (
+        '$cliente_id',
+        '$tipo',
+        '$valor',
+        '$data'
+    )
+    ");
+}
+
+$clientes = $db->query(
+"SELECT * FROM clientes ORDER BY nome ASC"
+);
+
+$servicos = $db->query("
+SELECT servicos.*, clientes.nome
+
+FROM servicos
+
+LEFT JOIN clientes
+ON clientes.id = servicos.cliente_id
+
+ORDER BY servicos.id DESC
+");
+
 ?>
 
 <!DOCTYPE html>
@@ -32,16 +76,30 @@ href="../assets/css/dashboard.css">
 
 <h2>Novo Atendimento</h2>
 
-<form>
+<form method="POST">
 
 <div class="input-group">
 
 <label>Cliente</label>
 
-<select>
+<select
+name="cliente_id"
+required>
 
-<option>Selecionar Cliente</option>
-<option>Maria Oliveira</option>
+<option value="">
+Selecionar Cliente
+</option>
+
+<?php while($cliente = $clientes->fetchArray()) { ?>
+
+<option
+value="<?= $cliente['id']; ?>">
+
+<?= $cliente['nome']; ?>
+
+</option>
+
+<?php } ?>
 
 </select>
 
@@ -51,7 +109,7 @@ href="../assets/css/dashboard.css">
 
 <label>Tipo de Serviço</label>
 
-<select>
+<select name="tipo">
 
 <option>Faxina</option>
 <option>Meia-faxina</option>
@@ -72,7 +130,8 @@ href="../assets/css/dashboard.css">
 <input
 type="number"
 step="0.01"
-placeholder="0,00">
+name="valor"
+required>
 
 </div>
 
@@ -80,11 +139,15 @@ placeholder="0,00">
 
 <label>Data</label>
 
-<input type="date">
+<input
+type="date"
+name="data">
 
 </div>
 
-<button>
+<button
+type="submit"
+name="salvar">
 
 Salvar Atendimento
 
@@ -104,49 +167,36 @@ Salvar Atendimento
 
 <tr>
 
-<td>Maria Oliveira</td>
+<th>Cliente</th>
+<th>Serviço</th>
+<th>Valor</th>
+<th>Data</th>
+
+</tr>
+
+<?php while($servico = $servicos->fetchArray()) { ?>
+
+<tr>
 
 <td>
-
-<div class="multi-service">
-
-<span>
-Faxina — R$180
-</span>
-
-<span>
-Lavanderia — R$80
-</span>
-
-<span>
-Airbnb — R$220
-</span>
-
-</div>
-
+<?= $servico['nome']; ?>
 </td>
 
 <td>
+<?= $servico['tipo']; ?>
+</td>
 
-<span class="status concluido">
-Concluído
-</span>
+<td>
+R$ <?= number_format($servico['valor'],2,',','.'); ?>
+</td>
 
+<td>
+<?= $servico['data']; ?>
 </td>
 
 </tr>
 
-<td>Maria Oliveira</td>
-<td>Faxina</td>
-<td>R$ 180</td>
-
-<td>
-<span class="status concluido">
-Concluído
-</span>
-</td>
-
-</tr>
+<?php } ?>
 
 </table>
 
