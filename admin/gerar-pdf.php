@@ -186,6 +186,14 @@ table.servicos td{
     padding:12px;
 
     font-size:12px;
+
+    color:#000000;
+}
+
+.cliente-box p,
+.info p{
+
+    color:#000000;
 }
 
 .total{
@@ -334,8 +342,8 @@ while($item = $itens->fetchArray()){
     </td>
 
     <td>
-    '.$item['descricao'].'
-    </td>
+'.$item['descricao'].'
+</td>
 
     <td>
 
