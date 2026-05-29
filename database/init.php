@@ -146,3 +146,26 @@ $db->exec("CREATE TABLE IF NOT EXISTS historico_financeiro (
     data TEXT
 
 )");
+$db->exec("CREATE TABLE IF NOT EXISTS historico_servicos (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    orcamento_id INTEGER,
+
+    cliente TEXT,
+
+    telefone TEXT,
+
+    endereco TEXT,
+
+    servico TEXT,
+
+    descricao TEXT,
+
+    valor REAL,
+
+    data_execucao TEXT,
+
+    status_pagamento TEXT
+
+)");

@@ -13,6 +13,23 @@ WHERE id = '$id'
 
 ", true);
 
+$orcamento = $db->querySingle("
+
+SELECT
+orcamentos.*,
+clientes.nome,
+clientes.telefone,
+clientes.endereco
+
+FROM orcamentos
+
+LEFT JOIN clientes
+ON clientes.id = orcamentos.cliente_id
+
+WHERE orcamentos.id = '".$agenda['orcamento_id']."'
+
+", true);
+
 $itens = $db->query("
 
 SELECT *
@@ -26,22 +43,30 @@ while($item = $itens->fetchArray()){
 
     $db->exec("
 
-    INSERT INTO historico_financeiro
+    INSERT INTO historico_servicos
     (
+        orcamento_id,
         cliente,
         telefone,
+        endereco,
         servico,
+        descricao,
         valor,
-        data
+        data_execucao,
+        status_pagamento
     )
 
     VALUES
     (
-        '".$agenda['cliente']."',
-        '".$agenda['telefone']."',
+        '".$agenda['orcamento_id']."',
+        '".$orcamento['nome']."',
+        '".$orcamento['telefone']."',
+        '".$orcamento['endereco']."',
         '".$item['servico']."',
+        '".$item['descricao']."',
         '".$item['valor']."',
-        '".$agenda['data']."'
+        '".$agenda['data']."',
+        'Pendente'
     )
 
     ");
