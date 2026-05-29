@@ -4,20 +4,46 @@ include '../config/conexao.php';
 
 $mes = date('m');
 $ano = date('Y');
+$cliente = '';
 
 if($_GET){
 
     $mes = $_GET['mes'];
     $ano = $_GET['ano'];
+    $cliente = $_GET['cliente'];
 }
+
+$where = "
+
+WHERE strftime('%m', data_execucao) = '$mes'
+AND strftime('%Y', data_execucao) = '$ano'
+
+";
+
+if($cliente != ''){
+
+    $where .= "
+    
+    AND cliente = '$cliente'
+    
+    ";
+}
+
+$clientes = $db->query("
+
+SELECT DISTINCT cliente
+FROM historico_servicos
+
+ORDER BY cliente ASC
+
+");
 
 $historico = $db->query("
 
 SELECT *
 FROM historico_servicos
 
-WHERE strftime('%m', data_execucao) = '$mes'
-AND strftime('%Y', data_execucao) = '$ano'
+$where
 
 ORDER BY data_execucao DESC
 
@@ -48,13 +74,6 @@ href="../assets/css/dashboard.css">
     padding:25px;
 
     border-radius:20px;
-
-    margin-bottom:20px;
-}
-
-.box h2{
-
-    color:#1e3a8a;
 
     margin-bottom:20px;
 }
@@ -179,14 +198,41 @@ table th{
 
 <form method="GET">
 
-<select name="mes">
+<select name="cliente">
 
-<?php for($i=1; $i<=12; $i++) { ?>
+<option value="">
+
+Todos Clientes
+
+</option>
+
+<?php while($c = $clientes->fetchArray()) { ?>
 
 <option
-value="<?= str_pad($i, 2, '0', STR_PAD_LEFT); ?>"
+value="<?= $c['cliente']; ?>"
 
-<?= $mes == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : ''; ?>>
+<?= $cliente == $c['cliente'] ? 'selected' : ''; ?>>
+
+<?= $c['cliente']; ?>
+
+</option>
+
+<?php } ?>
+
+</select>
+
+<select name="mes">
+
+<?php for($i=1; $i<=12; $i++) {
+
+$valorMes = str_pad($i, 2, '0', STR_PAD_LEFT);
+
+?>
+
+<option
+value="<?= $valorMes; ?>"
+
+<?= $mes == $valorMes ? 'selected' : ''; ?>>
 
 <?= $i; ?>
 
