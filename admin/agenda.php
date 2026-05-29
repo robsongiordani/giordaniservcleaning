@@ -134,9 +134,17 @@ href="../assets/css/dashboard.css">
 
 <h2>
 
-<?= $item['cliente']; ?>
+<?= $item['os_numero']; ?>
 
 </h2>
+
+<p>
+
+<strong>Cliente:</strong>
+
+<?= $item['cliente']; ?>
+
+</p>
 
 <p>
 

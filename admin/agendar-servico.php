@@ -43,24 +43,28 @@ if($_POST){
     $data = $_POST['data'];
     $horario = $_POST['horario'];
     $observacoes = $_POST['observacoes'];
+    $osNumero = 'OS-' . str_pad($id, 5, '0', STR_PAD_LEFT);
 
     $db->exec("
 
-    INSERT INTO agenda
-    (
-        orcamento_id,
-        cliente,
-        telefone,
-        servicos,
-        data,
-        horario,
-        observacoes,
-        status
-    )
+   INSERT INTO agenda
+(
+    os_numero,
+    orcamento_id,
+    cliente,
+    telefone,
+    servicos,
+    data,
+    horario,
+    observacoes,
+    status
+)
 
     VALUES
-    (
-        '$id',
+   VALUES
+(
+    '$osNumero',
+    '$id',
         '".$orcamento['nome']."',
         '".$orcamento['telefone']."',
         '".$lista."',
