@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include '../config/conexao.php';
 
 $id = $_GET['id'];
@@ -12,6 +15,12 @@ FROM agenda
 WHERE id = '$id'
 
 ", true);
+
+if(!$agenda){
+
+    die('Agenda não encontrada');
+
+}
 
 $orcamento = $db->querySingle("
 
@@ -29,6 +38,12 @@ ON clientes.id = orcamentos.cliente_id
 WHERE orcamentos.id = '".$agenda['orcamento_id']."'
 
 ", true);
+
+if(!$orcamento){
+
+    die('Orçamento não encontrado');
+
+}
 
 $itens = $db->query("
 
@@ -83,6 +98,6 @@ WHERE id = '$id'
 
 ");
 
-header('Location: agenda.php');
+header('Location: recibos.php');
 
 ?>
