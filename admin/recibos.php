@@ -2,30 +2,24 @@
 
 include '../config/conexao.php';
 
-$cliente = $_GET['cliente'] ?? '';
-$mes = $_GET['mes'] ?? date('m');
-$ano = $_GET['ano'] ?? date('Y');
+$mes = date('m');
+$ano = date('Y');
 
-$where = "";
+if($_GET){
 
-if($cliente != ''){
-
-    $where .= "
-    AND cliente LIKE '%$cliente%'
-    ";
+    $mes = $_GET['mes'];
+    $ano = $_GET['ano'];
 }
 
 $historico = $db->query("
 
 SELECT *
-FROM historico_financeiro
+FROM historico_servicos
 
-WHERE strftime('%m', data) = '$mes'
-AND strftime('%Y', data) = '$ano'
+WHERE strftime('%m', data_execucao) = '$mes'
+AND strftime('%Y', data_execucao) = '$ano'
 
-$where
-
-ORDER BY data ASC
+ORDER BY data_execucao DESC
 
 ");
 
@@ -47,7 +41,7 @@ href="../assets/css/dashboard.css">
 
 <style>
 
-.filter-box{
+.box{
 
     background:white;
 
@@ -58,21 +52,28 @@ href="../assets/css/dashboard.css">
     margin-bottom:20px;
 }
 
-.filter-box input,
-.filter-box select{
+.box h2{
 
-    padding:12px;
+    color:#1e3a8a;
 
-    border-radius:10px;
-
-    border:1px solid #ddd;
-
-    margin-right:10px;
+    margin-bottom:20px;
 }
 
-.filter-box button{
+.box input,
+.box select{
 
-    padding:12px 18px;
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:15px;
+
+    border-radius:12px;
+
+    border:1px solid #ddd;
+}
+
+.box button{
 
     background:#2563eb;
 
@@ -80,18 +81,13 @@ href="../assets/css/dashboard.css">
 
     border:none;
 
+    padding:12px 18px;
+
     border-radius:10px;
 
+    font-weight:bold;
+
     cursor:pointer;
-}
-
-.recibo{
-
-    background:white;
-
-    padding:30px;
-
-    border-radius:20px;
 }
 
 table{
@@ -103,17 +99,7 @@ table{
     margin-top:20px;
 }
 
-table th{
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:12px;
-
-    text-align:left;
-}
-
+table th,
 table td{
 
     border:1px solid #ddd;
@@ -121,19 +107,27 @@ table td{
     padding:12px;
 }
 
+table th{
+
+    background:#2563eb;
+
+    color:white;
+}
+
 .total{
 
-    margin-top:30px;
-
     text-align:right;
-}
 
-.total h1{
+    margin-top:20px;
+
+    font-size:32px;
 
     color:#2563eb;
+
+    font-weight:bold;
 }
 
-.btns{
+.actions{
 
     margin-top:30px;
 
@@ -148,9 +142,9 @@ table td{
 
     border-radius:12px;
 
-    text-decoration:none;
-
     color:white;
+
+    text-decoration:none;
 
     font-weight:bold;
 }
@@ -181,24 +175,18 @@ table td{
 
 </div>
 
-<div class="filter-box">
+<div class="box">
 
 <form method="GET">
-
-<input
-type="text"
-name="cliente"
-placeholder="Cliente"
-value="<?= $cliente; ?>">
 
 <select name="mes">
 
 <?php for($i=1; $i<=12; $i++) { ?>
 
 <option
-value="<?= str_pad($i,2,'0',STR_PAD_LEFT); ?>"
+value="<?= str_pad($i, 2, '0', STR_PAD_LEFT); ?>"
 
-<?= $mes == str_pad($i,2,'0',STR_PAD_LEFT) ? 'selected' : ''; ?>>
+<?= $mes == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : ''; ?>>
 
 <?= $i; ?>
 
@@ -223,17 +211,9 @@ Filtrar
 
 </div>
 
-<div class="recibo">
-
-<h2>
-
-Recibo Mensal
-
-</h2>
+<div class="box">
 
 <table>
-
-<thead>
 
 <tr>
 
@@ -243,10 +223,6 @@ Recibo Mensal
 <th>Valor</th>
 
 </tr>
-
-</thead>
-
-<tbody>
 
 <?php while($item = $historico->fetchArray()) {
 
@@ -258,7 +234,7 @@ $total += $item['valor'];
 
 <td>
 
-<?= $item['data']; ?>
+<?= $item['data_execucao']; ?>
 
 </td>
 
@@ -289,13 +265,9 @@ $item['valor'],
 
 <?php } ?>
 
-</tbody>
-
 </table>
 
 <div class="total">
-
-<h1>
 
 Total:
 R$ <?= number_format(
@@ -304,28 +276,6 @@ $total,
 ',',
 '.'
 ); ?>
-
-</h1>
-
-</div>
-
-<div class="btns">
-
-<a
-href="#"
-class="btn pdf">
-
-Gerar PDF
-
-</a>
-
-<a
-href="#"
-class="btn whatsapp">
-
-WhatsApp
-
-</a>
 
 </div>
 
