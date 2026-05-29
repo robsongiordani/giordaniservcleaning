@@ -97,9 +97,10 @@ href="../assets/css/dashboard.css">
 .preview table th,
 .preview table td{
 
-    border:1px solid #ddd;
+    color:#000000 !important;
 
-    padding:12px;
+    background:#ffffff;
+
 }
 
 .preview table th{
@@ -307,7 +308,9 @@ width="220">
 
 <td>
 
+<span style="color:#000000;font-weight:500;">
 <?= $item['descricao']; ?>
+</span>
 
 </td>
 

@@ -67,6 +67,33 @@ href="../assets/css/dashboard.css">
 
 <style>
 
+    table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#2563eb;
+    color:white;
+    padding:12px;
+}
+
+table td{
+    color:#000000 !important;
+    background:#ffffff;
+    padding:12px;
+    border:1px solid #e5e7eb;
+}
+
+table tr{
+    color:#000000 !important;
+}
+
+table a{
+    color:#2563eb !important;
+    font-weight:bold;
+}
+
 .box{
 
     background:white;
@@ -259,13 +286,22 @@ Filtrar
 
 <div class="box">
 
+<form method="POST" action="gerar-recibo.php">
+
 <table>
 
 <tr>
 
+<th></th>
+
+<th>OS</th>
+
 <th>Data</th>
+
 <th>Cliente</th>
+
 <th>Serviço</th>
+
 <th>Valor</th>
 
 </tr>
@@ -277,6 +313,26 @@ $total += $item['valor'];
 ?>
 
 <tr>
+
+<td>
+
+<input
+type="checkbox"
+name="servicos[]"
+value="<?= $item['id']; ?>">
+
+</td>
+
+<td>
+
+<a
+href="visualizar-orcamento.php?id=<?= $item['orcamento_id']; ?>">
+
+OS #<?= $item['orcamento_id']; ?>
+
+</a>
+
+</td>
 
 <td>
 
@@ -314,6 +370,20 @@ $item['valor'],
 </table>
 
 <div class="total">
+
+<div class="actions">
+
+<button
+type="submit"
+class="btn pdf">
+
+Gerar Recibo Selecionado
+
+</button>
+
+</div>
+
+</form>
 
 Total:
 R$ <?= number_format(
