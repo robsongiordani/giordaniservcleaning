@@ -60,7 +60,6 @@ if($_POST){
     status
 )
 
-    VALUES
    VALUES
 (
     '$osNumero',

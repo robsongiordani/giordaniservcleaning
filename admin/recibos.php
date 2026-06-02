@@ -286,7 +286,7 @@ Filtrar
 
 <div class="box">
 
-<form method="POST" action="gerar-recibo.php">
+<form method="GET" action="gerar-recibo.php" target="_blank">
 
 <table>
 
@@ -317,9 +317,10 @@ $total += $item['valor'];
 <td>
 
 <input
-type="checkbox"
-name="servicos[]"
-value="<?= $item['id']; ?>">
+type="radio"
+name="id"
+value="<?= $item['orcamento_id']; ?>"
+required>
 
 </td>
 

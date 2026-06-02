@@ -92,7 +92,9 @@ $db->exec("
 
 UPDATE agenda
 
-SET status = 'Concluído'
+SET
+    status = 'Concluído',
+    valor = '".$orcamento['total']."'
 
 WHERE id = '$id'
 
