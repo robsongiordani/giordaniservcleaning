@@ -7,7 +7,17 @@ $agenda = $db->query("
 SELECT *
 FROM agenda
 
-ORDER BY data ASC
+ORDER BY
+
+CASE
+    WHEN status = 'Agendado' THEN 1
+    WHEN status = 'Em andamento' THEN 2
+    WHEN status = 'Concluído' THEN 3
+    ELSE 4
+END,
+
+data ASC,
+horario ASC
 
 ");
 

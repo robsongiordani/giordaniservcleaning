@@ -40,10 +40,17 @@ ORDER BY cliente ASC
 
 $historico = $db->query("
 
-SELECT *
+SELECT
+orcamento_id,
+cliente,
+data_execucao,
+SUM(valor) as valor_total
+
 FROM historico_servicos
 
 $where
+
+GROUP BY orcamento_id
 
 ORDER BY data_execucao DESC
 
@@ -286,7 +293,7 @@ Filtrar
 
 <div class="box">
 
-<form method="GET" action="gerar-recibo.php" target="_blank">
+<form method="POST" action="gerar-recibo.php" target="_blank">
 
 <table>
 
@@ -308,7 +315,7 @@ Filtrar
 
 <?php while($item = $historico->fetchArray()) {
 
-$total += $item['valor'];
+$total += $item['valor_total'];
 
 ?>
 
@@ -317,10 +324,9 @@ $total += $item['valor'];
 <td>
 
 <input
-type="radio"
-name="id"
-value="<?= $item['orcamento_id']; ?>"
-required>
+type="checkbox"
+name="servicos[]"
+value="<?= $item['orcamento_id']; ?>">
 
 </td>
 
@@ -349,14 +355,14 @@ OS #<?= $item['orcamento_id']; ?>
 
 <td>
 
-<?= $item['servico']; ?>
+Múltiplos serviços
 
 </td>
 
 <td>
 
 R$ <?= number_format(
-$item['valor'],
+$item['valor_total'],
 2,
 ',',
 '.'

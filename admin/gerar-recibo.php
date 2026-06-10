@@ -1,5 +1,10 @@
 <?php
 
+ob_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 require '../vendor/autoload.php';
 
 use Dompdf\Dompdf;
@@ -7,24 +12,35 @@ use Dompdf\Options;
 
 include '../config/conexao.php';
 
-$id = $_GET['id'];
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$agenda = $db->querySingle("
+$servicos = $_POST['servicos'] ?? [];
 
-SELECT *
-FROM agenda
-
-WHERE orcamento_id = '$id'
-
-ORDER BY id DESC
-
-", true);
-
-if(!$agenda){
-
-    die('Serviço não encontrado.');
-
+if(empty($servicos)){
+    die('Nenhum serviço selecionado.');
 }
+
+$ids = implode(',', array_map('intval', $servicos));
+
+$dados = $db->query("
+
+SELECT
+historico_servicos.*,
+clientes.cpf_cnpj,
+clientes.endereco,
+clientes.telefone
+
+FROM historico_servicos
+
+LEFT JOIN clientes
+ON clientes.nome = historico_servicos.cliente
+
+WHERE historico_servicos.orcamento_id IN ($ids)
+
+ORDER BY data_execucao ASC
+
+");
 
 function base64Image($path){
 
@@ -43,31 +59,69 @@ $logo = base64Image(
 __DIR__ . '/../assets/img/logo.png'
 );
 
+$linhas = '';
+
+$total = 0;
+$cliente = '';
+$cpf_cnpj = '';
+$endereco = '';
+$telefone = '';
+
+while($item = $dados->fetchArray()){
+
+    $cliente = $item['cliente'];
+
+    $cpf_cnpj = $item['cpf_cnpj'];
+$endereco = $item['endereco'];
+$telefone = $item['telefone'];
+
+    $total += $item['valor'];
+
+    $linhas .= '
+
+    <tr>
+
+        <td style="text-align: center;">'.$item['data_execucao'].'</td>
+
+        <td style="text-align: center;">'.$item['servico'].'</td>
+
+        <td style="text-align: center;">R$ '.number_format(
+            $item['valor'],
+            2,
+            ',',
+            '.'
+        ).'</td>
+
+    </tr>
+
+    ';
+}
+
+$nomeArquivo = 'recibo.pdf';
+
 $html = '
 
 <style>
 
 body{
     font-family: DejaVu Sans;
-    padding:30px;
+    padding:25px;
     color:#111827;
-}
-
-.logo{
-    width:150px;
-    margin-bottom:20px;
+    font-size:12px;
 }
 
 h1{
     color:#2563eb;
-    margin-bottom:20px;
+    margin-bottom:12px;
+    text-align:center;
+    font-size:24px;
 }
 
 .box{
     border:1px solid #ddd;
     border-radius:12px;
-    padding:15px;
-    margin-bottom:20px;
+    padding:14px;
+    margin-bottom:17px;
 }
 
 .box p{
@@ -81,50 +135,161 @@ h1{
 
 </style>
 
-<img src="'.$logo.'" class="logo">
+<table style="width:100%; margin-bottom:30px;">
+
+<tr>
+
+<td style="width:160px; border:none;">
+
+<img src="'.$logo.'" style="width:180px;">
+
+</td>
+
+<td style="border:none; vertical-align:top;">
+
+<h2 style="
+margin:0;
+color:#1e3a8a;
+font-size:18px;
+">
+
+Giordani Cleaning (059.766.909-04)
+Fernanda e Robson
+
+</h2>
+
+<p style="margin:4px 0;">
+Serviços de Limpeza, Lavanderia e Pequenas Manutenções
+</p>
+
+<p style="margin:4px 0;">
+Balneário Piçarras - SC
+</p>
+
+<p style="margin:4px 0;">
+(47) 99183-6334 | (47) 99213-2615
+</p>
+
+<p style="margin:4px 0;">
+cleaning.giordani.net.br
+</p>
+
+</td>
+
+</tr>
+
+</table>
 
 <h1>RECIBO DE SERVIÇO</h1>
 
 <div class="box">
 
 <p>
-<strong>OS:</strong>
-'.$agenda['os_numero'].'
+<strong>Cliente:</strong>
+'.$cliente.'
 </p>
 
 <p>
-<strong>Cliente:</strong>
-'.$agenda['cliente'].'
+<strong>CPF/CNPJ:</strong>
+'.$cpf_cnpj.'
+</p>
+
+<p>
+<strong>Endereço:</strong>
+'.$endereco.'
 </p>
 
 <p>
 <strong>Telefone:</strong>
-'.$agenda['telefone'].'
-</p>
-
-<p>
-<strong>Data:</strong>
-'.$agenda['data'].'
-</p>
-
-<p>
-<strong>Horário:</strong>
-'.$agenda['horario'].'
-</p>
-
-<p>
-<strong>Serviços:</strong>
-'.$agenda['servicos'].'
-</p>
-
-<p>
-<strong>Observações:</strong>
-'.$agenda['observacoes'].'
+'.$telefone.'
 </p>
 
 </div>
 
+<table
+style="width:100%;
+border-collapse:collapse;
+margin-top:20px;">
+
+<tr>
+
+<th style="
+background:#2563eb;
+color:white;
+padding:11px;">
+Data
+</th>
+
+<th style="
+background:#2563eb;
+color:white;
+padding:12px;">
+Serviço
+</th>
+
+<th style="
+background:#2563eb;
+color:white;
+padding:12px;">
+Valor
+</th>
+
+</tr>
+
+'.$linhas.'
+
+</table>
+
+<div style="
+margin-top:25px;
+border:1px solid #d1d5db;
+border-radius:10px;
+padding:16px;
+">
+
+<table style="
+width:100%;
+border:none;
+">
+
+<tr>
+
+<td style="
+border:none;
+font-size:18px;
+font-weight:bold;
+">
+
+Total dos serviços prestados:
+
+</td>
+
+<td style="
+border:none;
+text-align:left;
+font-size:28px;
+font-weight:bold;
+color:#2563eb;
+width:220px;
+">
+
+R$ '.number_format(
+$total,
+2,
+',',
+'.'
+).'
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
 <p>
+
 
 Declaramos que os serviços acima foram executados pela
 <strong>Giordani Cleaning</strong>.
@@ -133,7 +298,7 @@ Declaramos que os serviços acima foram executados pela
 
 <div class="footer">
 
-<br><br><br>
+<br><br>
 
 ____________________________________
 
@@ -155,12 +320,19 @@ $dompdf->loadHtml($html);
 
 $dompdf->setPaper('A4', 'portrait');
 
+if(empty($linhas)){
+    die('Nenhum serviço encontrado.');
+}
+
 $dompdf->render();
 
+while (ob_get_level()) {
+    ob_end_clean();
+}
+
 $dompdf->stream(
-
-"recibo-".$agenda['os_numero'].".pdf",
-
-array("Attachment" => false)
-
+    $nomeArquivo,
+    array("Attachment" => false)
 );
+
+exit;
