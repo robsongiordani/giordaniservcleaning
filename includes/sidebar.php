@@ -34,6 +34,10 @@ Recibos
 Carteira de Clientes
 </a>
 
+<a href="../admin/funcionarios.php">
+Funcionários
+</a>
+
 <a href="../logout.php">
 Sair
 </a>

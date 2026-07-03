@@ -196,6 +196,82 @@ href="../assets/css/dashboard.css">
 
 </p>
 
+<?php
+
+$funcionarios = $db->query("
+SELECT *
+FROM funcionarios
+WHERE ativo = 1
+ORDER BY nome
+");
+
+?>
+
+<p>
+
+<strong>Funcionário:</strong>
+
+<form
+method="POST"
+action="salvar-funcionario-agenda.php">
+
+<input
+type="hidden"
+name="agenda_id"
+value="<?= $item['id']; ?>">
+
+<select
+name="funcionario_id"
+style="
+padding:10px;
+border-radius:8px;
+margin-top:8px;
+width:280px;
+">
+
+<option value="">
+
+Selecione...
+
+</option>
+
+<?php
+
+while($f = $funcionarios->fetchArray()){
+
+?>
+
+<option
+
+value="<?= $f['id']; ?>"
+
+<?= $item['funcionario_id']==$f['id'] ? 'selected' : ''; ?>>
+
+<?= $f['nome']; ?>
+
+</option>
+
+<?php } ?>
+
+</select>
+
+<button
+style="
+margin-left:10px;
+padding:10px 15px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:8px;">
+
+Salvar
+
+</button>
+
+</form>
+
+</p>
+
 <div class="action-area">
 
 <?php if($item['status'] == 'Agendado') { ?>
