@@ -153,13 +153,13 @@ color:#1e3a8a;
 font-size:18px;
 ">
 
-Giordani Cleaning (059.766.909-04)
-Fernanda e Robson
+Fernanda Fagundes Bonfim Giordani 
+(059.766.909-04)
 
 </h2>
 
 <p style="margin:4px 0;">
-Serviços de Limpeza, Lavanderia e Pequenas Manutenções
+Serviços de Limpeza, Lavanderia, Zeladoria e Pequenas Manutenções
 </p>
 
 <p style="margin:4px 0;">
@@ -291,8 +291,7 @@ $total,
 <p>
 
 
-Declaramos que os serviços acima foram executados pela
-<strong>Giordani Cleaning</strong>.
+<strong>Declaramos que os serviços acima foram executados nas datas acima mencionadas</strong>.
 
 </p>
 
@@ -304,7 +303,7 @@ ____________________________________
 
 <br>
 
-Giordani Cleaning
+Fernanda Fagundes Bonfim Giordani
 
 </div>
 
