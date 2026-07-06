@@ -9,36 +9,53 @@ if(isset($_POST['finalizar'])){
 
     $agenda_id = (int)$_POST['agenda_id'];
 
-    $comissoes = $_POST['comissao'];
-    $itens_id = $_POST['item_id'];
-
     $agenda = $db->querySingle("
-    SELECT *
-    FROM agenda
-    WHERE id = $agenda_id
+        SELECT *
+        FROM agenda
+        WHERE id = $agenda_id
     ", true);
+
+    if(!$agenda){
+        die("Agenda não encontrada.");
+    }
 
     $orcamento = $db->querySingle("
-    SELECT
-        orcamentos.*,
-        clientes.nome,
-        clientes.telefone,
-        clientes.endereco
-    FROM orcamentos
-    LEFT JOIN clientes
-    ON clientes.id = orcamentos.cliente_id
-    WHERE orcamentos.id = ".$agenda['orcamento_id']."
+        SELECT
+            orcamentos.*,
+            clientes.nome,
+            clientes.telefone,
+            clientes.endereco
+        FROM orcamentos
+        LEFT JOIN clientes
+        ON clientes.id = orcamentos.cliente_id
+        WHERE orcamentos.id = ".$agenda['orcamento_id']."
     ", true);
 
-    foreach($itens_id as $i => $item_id){
+    if(!$orcamento){
+        die("Orçamento não encontrado.");
+    }
+
+    $observacoes = SQLite3::escapeString($_POST['observacoes']);
+
+    foreach($_POST['item_id'] as $i => $item_id){
 
         $item = $db->querySingle("
-        SELECT *
-        FROM itens_orcamento
-        WHERE id = $item_id
+            SELECT *
+            FROM itens_orcamento
+            WHERE id = ".(int)$item_id."
         ", true);
 
-        $comissao = str_replace(',','.', $comissoes[$i]);
+        if(!$item){
+            continue;
+        }
+
+        $comissao = (float)str_replace(",",".",$_POST['comissao'][$i]);
+
+if($comissao > $item['valor']){
+    $comissao = $item['valor'];
+}
+
+$lucro = $item['valor'] - $comissao;
 
         $db->exec("
 
@@ -55,7 +72,10 @@ if(isset($_POST['finalizar'])){
             status_pagamento,
             funcionario_id,
             funcionario_nome,
-            comissao
+            comissao,
+            lucro,
+            observacoes,
+            data_finalizacao
         )
 
         VALUES
@@ -71,7 +91,10 @@ if(isset($_POST['finalizar'])){
             'Pendente',
             '".$agenda['funcionario_id']."',
             '".$agenda['funcionario_nome']."',
-            '$comissao'
+           '$comissao',
+'$lucro',
+            '$observacoes',
+            '".date('Y-m-d H:i:s')."'
         )
 
         ");
@@ -79,38 +102,42 @@ if(isset($_POST['finalizar'])){
     }
 
     $db->exec("
-    UPDATE agenda
-    SET
-        status='Concluído',
-        valor='".$orcamento['total']."'
-    WHERE id=$agenda_id
+
+        UPDATE agenda
+
+        SET
+
+            status='Concluído',
+            valor='".$orcamento['total']."'
+
+        WHERE id=$agenda_id
+
     ");
 
     header("Location: recibos.php");
     exit;
-
 }
 
-$id = $_GET['id'];
+$id = (int)$_GET['id'];
 
 $agenda = $db->querySingle("
 
 SELECT *
+
 FROM agenda
 
-WHERE id = '$id'
+WHERE id = $id
 
 ", true);
 
 if(!$agenda){
-
-    die('Agenda não encontrada');
-
+    die("Agenda não encontrada.");
 }
 
 $orcamento = $db->querySingle("
 
 SELECT
+
 orcamentos.*,
 clientes.nome,
 clientes.telefone,
@@ -121,15 +148,23 @@ FROM orcamentos
 LEFT JOIN clientes
 ON clientes.id = orcamentos.cliente_id
 
-WHERE orcamentos.id = '".$agenda['orcamento_id']."'
+WHERE orcamentos.id = ".$agenda['orcamento_id']."
 
 ", true);
 
 if(!$orcamento){
-
-    die('Orçamento não encontrado');
-
+    die("Orçamento não encontrado.");
 }
+
+$itens = $db->query("
+
+SELECT *
+
+FROM itens_orcamento
+
+WHERE orcamento_id=".$agenda['orcamento_id']."
+
+");
 
 ?>
 
@@ -143,77 +178,56 @@ if(!$orcamento){
 
 <title>Finalizar Serviço</title>
 
-<link rel="stylesheet"
-href="../assets/css/dashboard.css">
+<link rel="stylesheet" href="../assets/css/dashboard.css">
 
 <style>
 
 .card{
-
-background:white;
-
-padding:30px;
-
-border-radius:20px;
-
+    background:white;
+    padding:30px;
+    border-radius:20px;
 }
 
 table{
-
-width:100%;
-
-border-collapse:collapse;
-
-margin-top:20px;
-
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
 }
 
 th{
-
-background:#2563eb;
-
-color:white;
-
-padding:12px;
-
+    background:#2563eb;
+    color:white;
+    padding:12px;
 }
 
 td{
-
-padding:12px;
-
-border:1px solid #ddd;
-
-color:#111827;
-
+    padding:12px;
+    border:1px solid #ddd;
+    color:#111827;
 }
 
-input{
+input[type=number]{
+    width:120px;
+    padding:8px;
+}
 
-width:120px;
-
-padding:8px;
-
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    resize:vertical;
 }
 
 button{
-
-background:#16a34a;
-
-color:white;
-
-padding:14px 20px;
-
-border:none;
-
-border-radius:10px;
-
-margin-top:20px;
-
-font-size:16px;
-
-cursor:pointer;
-
+    background:#16a34a;
+    color:white;
+    padding:14px 20px;
+    border:none;
+    border-radius:10px;
+    margin-top:20px;
+    cursor:pointer;
+    font-size:16px;
 }
 
 </style>
@@ -237,20 +251,21 @@ cursor:pointer;
 <h2>
 
 Cliente:
-
-<?= $orcamento['nome']; ?>
+<strong><?= $orcamento['nome']; ?></strong>
 
 </h2>
 
 <p>
 
 Funcionário:
+<strong><?= $agenda['funcionario_nome']; ?></strong>
 
-<strong>
+</p>
 
-<?= $agenda['funcionario_nome']; ?>
+<p>
 
-</strong>
+Data do Serviço:
+<strong><?= $agenda['data']; ?></strong>
 
 </p>
 
@@ -267,27 +282,15 @@ value="<?= $agenda['id']; ?>">
 
 <th>Serviço</th>
 
+<th>Descrição</th>
+
 <th>Valor</th>
 
 <th>Comissão</th>
 
 </tr>
 
-<?php
-
-$itens = $db->query("
-
-SELECT *
-
-FROM itens_orcamento
-
-WHERE orcamento_id='".$agenda['orcamento_id']."'
-
-");
-
-while($item = $itens->fetchArray()){
-
-?>
+<?php while($item = $itens->fetchArray()) { ?>
 
 <tr>
 
@@ -299,24 +302,19 @@ while($item = $itens->fetchArray()){
 
 <td>
 
-R$
-
-<?= number_format(
-$item['valor'],
-2,
-',',
-'.'
-); ?>
+<?= $item['descricao']; ?>
 
 </td>
 
 <td>
 
-<input
+R$
 
-type="number"
+<?= number_format($item['valor'],2,',','.'); ?>
 
-step="0.01"
+</td>
+
+<td>
 
 <input
 type="hidden"
@@ -326,10 +324,10 @@ value="<?= $item['id']; ?>">
 <input
 type="number"
 step="0.01"
+min="0"
 name="comissao[]"
-placeholder="0,00">
-
-placeholder="0,00">
+placeholder="0,00"
+required>
 
 </td>
 
@@ -339,13 +337,52 @@ placeholder="0,00">
 
 </table>
 
-<button
+<br>
 
+<label>
+
+<b>Observações da execução</b>
+
+</label>
+
+<br><br>
+
+<textarea
+
+name="observacoes"
+
+rows="5"
+
+placeholder="Descreva como foi realizado o serviço, observações importantes, materiais utilizados, problemas encontrados..."></textarea>
+
+<br>
+
+<button
+type="submit"
 name="finalizar">
 
 Finalizar Serviço
 
 </button>
+
+<a
+
+href="agenda.php"
+
+style="
+
+margin-left:15px;
+background:#64748b;
+color:white;
+padding:14px 20px;
+border-radius:10px;
+text-decoration:none;
+
+">
+
+Cancelar
+
+</a>
 
 </form>
 

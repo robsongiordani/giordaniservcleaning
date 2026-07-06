@@ -38,6 +38,14 @@ Carteira de Clientes
 Funcionários
 </a>
 
+<a href="../admin/producao.php">
+Produção
+</a>
+
+<a href="../admin/financeiro.php">
+Financeiro
+</a>
+
 <a href="../logout.php">
 Sair
 </a>

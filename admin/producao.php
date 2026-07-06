@@ -175,7 +175,15 @@ tr:hover{
 
 <tr>
 
-<td><?= $row['funcionario_nome']; ?></td>
+<td>
+
+<a href="producao-detalhes.php?funcionario=<?= urlencode($row['funcionario_nome']); ?>&inicio=<?= $inicio; ?>&fim=<?= $fim; ?>">
+
+<?= $row['funcionario_nome']; ?>
+
+</a>
+
+</td>
 
 <td><?= $row['quantidade']; ?></td>
 
@@ -200,6 +208,8 @@ funcionario_nome,
 SUM(valor) as total
 
 FROM historico_servicos
+
+$where
 
 GROUP BY funcionario_nome
 

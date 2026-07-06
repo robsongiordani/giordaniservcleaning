@@ -1,19 +1,25 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors',1);
+
 include '../config/conexao.php';
 
 $agenda = $db->query("
 
 SELECT *
+
 FROM agenda
 
 ORDER BY
 
 CASE
-    WHEN status = 'Agendado' THEN 1
-    WHEN status = 'Em andamento' THEN 2
-    WHEN status = 'Concluído' THEN 3
-    ELSE 4
+
+WHEN status='Agendado' THEN 1
+WHEN status='Em andamento' THEN 2
+WHEN status='Concluído' THEN 3
+ELSE 4
+
 END,
 
 data ASC,
@@ -24,6 +30,7 @@ horario ASC
 ?>
 
 <!DOCTYPE html>
+
 <html lang="pt-br">
 
 <head>
@@ -32,94 +39,144 @@ horario ASC
 
 <title>Agenda</title>
 
-<link rel="stylesheet"
-href="../assets/css/dashboard.css">
+<link rel="stylesheet" href="../assets/css/dashboard.css">
 
 <style>
 
 .agenda-card{
 
-    background:white;
+background:#fff;
 
-    padding:25px;
+padding:25px;
 
-    border-radius:20px;
+border-radius:20px;
 
-    margin-bottom:20px;
+margin-bottom:20px;
+
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+
 }
 
 .agenda-card h2{
 
-    color:#1e3a8a;
+color:#1e3a8a;
 
-    margin-bottom:15px;
+margin-bottom:15px;
+
 }
 
 .agenda-card p{
 
-    margin:8px 0;
+margin:8px 0;
 
-    color:#334155;
+color:#334155;
+
 }
 
 .status{
 
-    color:white;
+color:#fff;
 
-    padding:8px 14px;
+padding:8px 14px;
 
-    border-radius:20px;
+border-radius:20px;
 
-    display:inline-block;
+display:inline-block;
 
-    font-weight:bold;
+font-weight:bold;
+
 }
 
 .agendado{
 
-    background:#f59e0b;
+background:#f59e0b;
+
 }
 
 .andamento{
 
-    background:#2563eb;
+background:#2563eb;
+
 }
 
 .concluido{
 
-    background:#22c55e;
+background:#16a34a;
+
 }
 
 .action-btn{
 
-    color:white;
+display:inline-block;
 
-    padding:10px 16px;
+padding:10px 16px;
 
-    border-radius:10px;
+border-radius:10px;
 
-    text-decoration:none;
+text-decoration:none;
 
-    font-weight:bold;
+color:#fff;
 
-    margin-left:15px;
+font-weight:bold;
 
-    display:inline-block;
+margin-right:10px;
+
+margin-top:10px;
+
 }
 
 .start{
 
-    background:#2563eb;
+background:#2563eb;
+
 }
 
 .finish{
 
-    background:#16a34a;
+background:#16a34a;
+
+}
+
+.delete{
+
+background:#dc2626;
+
 }
 
 .action-area{
 
-    margin-top:20px;
+margin-top:20px;
+
+}
+
+select{
+
+padding:10px;
+
+border-radius:8px;
+
+border:1px solid #d1d5db;
+
+width:280px;
+
+}
+
+button{
+
+padding:10px 18px;
+
+border:none;
+
+border-radius:8px;
+
+background:#2563eb;
+
+color:white;
+
+cursor:pointer;
+
+margin-left:10px;
+
 }
 
 </style>
@@ -138,7 +195,7 @@ href="../assets/css/dashboard.css">
 
 </div>
 
-<?php while($item = $agenda->fetchArray()) { ?>
+<?php while($item=$agenda->fetchArray()){ ?>
 
 <div class="agenda-card">
 
@@ -199,35 +256,42 @@ href="../assets/css/dashboard.css">
 <?php
 
 $funcionarios = $db->query("
+
 SELECT *
+
 FROM funcionarios
-WHERE ativo = 1
+
+WHERE ativo=1
+
 ORDER BY nome
+
 ");
 
 ?>
 
-<p>
-
-<strong>Funcionário:</strong>
-
 <form
+
 method="POST"
+
 action="salvar-funcionario-agenda.php">
 
 <input
+
 type="hidden"
+
 name="agenda_id"
+
 value="<?= $item['id']; ?>">
 
-<select
-name="funcionario_id"
-style="
-padding:10px;
-border-radius:8px;
-margin-top:8px;
-width:280px;
-">
+<label>
+
+<strong>Funcionário:</strong>
+
+</label>
+
+<br><br>
+
+<select name="funcionario_id">
 
 <option value="">
 
@@ -235,17 +299,13 @@ Selecione...
 
 </option>
 
-<?php
-
-while($f = $funcionarios->fetchArray()){
-
-?>
+<?php while($f=$funcionarios->fetchArray()){ ?>
 
 <option
 
 value="<?= $f['id']; ?>"
 
-<?= $item['funcionario_id']==$f['id'] ? 'selected' : ''; ?>>
+<?= ($item['funcionario_id']==$f['id'])?'selected':''; ?>>
 
 <?= $f['nome']; ?>
 
@@ -255,14 +315,7 @@ value="<?= $f['id']; ?>"
 
 </select>
 
-<button
-style="
-margin-left:10px;
-padding:10px 15px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;">
+<button>
 
 Salvar
 
@@ -270,11 +323,9 @@ Salvar
 
 </form>
 
-</p>
-
 <div class="action-area">
 
-<?php if($item['status'] == 'Agendado') { ?>
+<?php if($item['status']=='Agendado'){ ?>
 
 <span class="status agendado">
 
@@ -290,9 +341,18 @@ Iniciar Serviço
 
 </a>
 
+<a
+href="excluir-os.php?id=<?= $item['id']; ?>"
+class="action-btn delete"
+onclick="return confirm('Deseja realmente excluir esta Ordem de Serviço?\n\nTodos os dados relacionados serão apagados.\n\nDeseja continuar?');">
+
+Excluir OS
+
+</a>
+
 <?php } ?>
 
-<?php if($item['status'] == 'Em andamento') { ?>
+<?php if($item['status']=='Em andamento'){ ?>
 
 <span class="status andamento">
 
@@ -308,15 +368,41 @@ Finalizar Serviço
 
 </a>
 
+<a
+href="excluir-os.php?id=<?= $item['id']; ?>"
+class="action-btn delete"
+onclick="return confirm('Deseja realmente excluir esta Ordem de Serviço?\n\nTodos os dados relacionados serão apagados.\n\nDeseja continuar?');">
+
+Excluir OS
+
+</a>
+
 <?php } ?>
 
-<?php if($item['status'] == 'Concluído') { ?>
+<?php if($item['status']=='Concluído'){ ?>
 
 <span class="status concluido">
 
 Concluído
 
 </span>
+
+<a
+href="recibos.php?os=<?= $item['orcamento_id']; ?>"
+class="action-btn start">
+
+Ver Recibo
+
+</a>
+
+<a
+href="excluir-os.php?id=<?= $item['id']; ?>"
+class="action-btn delete"
+onclick="return confirm('Deseja realmente excluir esta Ordem de Serviço?\n\nTodos os dados relacionados serão apagados.\n\nDeseja continuar?');">
+
+Excluir OS
+
+</a>
 
 <?php } ?>
 
@@ -329,4 +415,5 @@ Concluído
 </div>
 
 </body>
+
 </html>
